@@ -5,6 +5,7 @@ from database import SessionLocal, engine, Base
 from fastapi import HTTPException
 from pydantic import BaseModel
 from models import SOSAlert
+from typing import List
 
 # Create all tables
 Base.metadata.create_all(bind=engine)
@@ -40,3 +41,8 @@ def create_sos_alert(alert: SOSAlertCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_alert)
     return {"message": "SOS alert stored", "id": db_alert.id}
+
+@app.get("/alerts", response_model=List[SOSAlertCreate])
+def get_alerts(db: Session = Depends(get_db)):
+    alerts = db.query(SOSAlert).all()
+    return alerts
