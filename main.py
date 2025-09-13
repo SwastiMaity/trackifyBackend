@@ -47,6 +47,9 @@ class SOSAlertCreate(BaseModel):
 class SOSAlertRead(SOSAlertCreate):
     id: int
 
+    class Config:
+        orm_mode = True
+
 class SOSAlertUpdate(BaseModel):
     lat: float = None
     lon: float = None
@@ -67,7 +70,7 @@ def create_sos_alert(alert: SOSAlertCreate, db: Session = Depends(get_db)):
 @app.get("/alerts", response_model=List[SOSAlertRead])
 def get_alerts(db: Session = Depends(get_db)):
     alerts = db.query(SOSAlert).all()
-    return alerts
+    return [SOSAlertRead.from_orm(alert) for alert in alerts]
 
 @app.get("/alerts/{alert_id}", response_model=SOSAlertRead)
 def get_alert_by_id(alert_id: int, db: Session = Depends(get_db)):
