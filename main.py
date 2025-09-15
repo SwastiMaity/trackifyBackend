@@ -65,7 +65,7 @@ def create_sos_alert(alert: SOSAlertCreate, db: Session = Depends(get_db)):
     db.add(db_alert)
     db.commit()
     db.refresh(db_alert)
-    return db_alert
+    return SOSAlertRead.from_orm(db_alert)
 
 @app.get("/alerts", response_model=List[SOSAlertRead])
 def get_alerts(db: Session = Depends(get_db)):
@@ -77,7 +77,7 @@ def get_alert_by_id(alert_id: int, db: Session = Depends(get_db)):
     alert = db.query(SOSAlert).filter(SOSAlert.id == alert_id).first()
     if not alert:
         raise HTTPException(status_code=404, detail="Alert not found")
-    return alert
+    return SOSAlertRead.from_orm(alert)
 
 @app.put("/alerts/{alert_id}", response_model=SOSAlertRead)
 def update_alert(alert_id: int, alert_update: SOSAlertUpdate, db: Session = Depends(get_db)):
@@ -92,7 +92,7 @@ def update_alert(alert_id: int, alert_update: SOSAlertUpdate, db: Session = Depe
         alert.timestamp = alert_update.timestamp
     db.commit()
     db.refresh(alert)
-    return alert
+    return SOSAlertRead.from_orm(alert)
 
 @app.delete("/alerts/{alert_id}")
 def delete_alert(alert_id: int, db: Session = Depends(get_db)):
