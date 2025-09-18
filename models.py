@@ -8,4 +8,5 @@ class SOSAlert(Base):
     lat = Column(Float, nullable=False)
     lon = Column(Float, nullable=False)
     timestamp = Column(String, nullable=False)
+    status = Column(String, nullable=False, default="active")
     
