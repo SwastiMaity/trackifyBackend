@@ -39,16 +39,26 @@ def get_db():
     finally:
         db.close()
 
-class SOSAlertCreate(BaseModel):
+class SOSAlertBase(BaseModel):
     lat: float
     lon: float
     timestamp: str
+    status: str = "new"
+
+class SOSAlertCreate(SOSAlertBase):
+    pass
+
+class SOSAlertResponse(SOSAlertBase):
+    id: int
+
+    class Config:
+        from_attributes = True
 
 class SOSAlertRead(SOSAlertCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class SOSAlertUpdate(BaseModel):
     lat: float = None
@@ -61,7 +71,7 @@ def health_check():
 
 @app.post("/sos", response_model=SOSAlertRead)
 def create_sos_alert(alert: SOSAlertCreate, db: Session = Depends(get_db)):
-    db_alert = SOSAlert(lat=alert.lat, lon=alert.lon, timestamp=alert.timestamp)
+    db_alert = SOSAlert(**alert.dict())
     db.add(db_alert)
     db.commit()
     db.refresh(db_alert)

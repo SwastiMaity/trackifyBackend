@@ -7,7 +7,7 @@ set -e
 FIXED_DOMAIN="olivaceous-bobette-winterless.ngrok-free.app"
 
 echo "Starting FastAPI app on 127.0.0.1:8000..."
-/workspaces/trackifyBackend/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000 &
+/home/swastimaity/Documents/trackifyBackend/venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000 &
 UVICORN_PID=$!
 
 sleep 2

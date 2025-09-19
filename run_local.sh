@@ -1,4 +1,4 @@
 #!/bin/bash
 # Script to run FastAPI app locally
 
-/workspaces/trackifyBackend/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+/home/swastimaity/Documents/trackifyBackend/venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
